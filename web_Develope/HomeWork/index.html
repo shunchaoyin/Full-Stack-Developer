@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +12,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
 </head>
+
 <body>
     <header>
         <nav role="navigation" aria-label="Main Navigation">
@@ -35,7 +39,7 @@
     <main>
         <section id="hero" class="hero-section">
             <div class="hero-content">
-                <h1 class="hero-title">Hello, I'm <span class="highlight">Snowball</span></h1>
+                <h1 class="hero-title">Hello, I'm <span class="highlight">Shunchao</span></h1>
                 <p class="hero-subtitle">Passionate Full-Stack Developer</p>
                 <a href="#contact" class="cta-button">Get In Touch</a>
             </div>
@@ -46,8 +50,10 @@
                 <h2 class="section-title">About Me</h2>
                 <div class="about-content">
                     <div class="about-text">
-                        <p>Hello! I'm a passionate developer with experience in web development, accessibility, and building great user experiences. I love creating digital solutions that make a difference.</p>
-                        <p>With expertise in modern web technologies, I focus on creating responsive, accessible, and performant applications.</p>
+                        <p>Hello! I'm a passionate developer with experience in Full-Stack development, accessibility,
+                            and
+                            building great user experiences. I love creating digital solutions that make a difference.
+                        </p>
                     </div>
                     <div class="about-stats">
                         <div class="stat">
@@ -59,8 +65,53 @@
                             <span class="stat-label">Years Experience</span>
                         </div>
                     </div>
+                    <!-- Education Background Section -->
+                    <div class="education-section">
+                        <h4><i class="fas fa-graduation-cap"></i> Education</h4>
+                        <div class="education-item">
+                            <div class="education-header">
+                                <h5>Sun Yat-sen University - M.S. in Remote Sensing Science and
+                                    Technology</h5>
+                                <span class="education-date">2020-2022</span>
+                            </div>
+                        </div>
+
+                        <div class="education-item">
+                            <div class="education-header">
+                                <h5>Minjiang University - B.S. in Surveying and Mapping Engineering Technology</h5>
+                                <span class="education-date">2016-2020</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Professional Experience Section -->
+                    <div class="experience-section">
+                        <h4><i class="fas fa-briefcase"></i> Professional Experience</h4>
+                        <div class="experience-item">
+                            <div class="experience-header">
+                                <h5>UNISOC (Shanghai) Technologies Co., Ltd. - Tool Development Engineer</h5>
+                                <span class="experience-date">Jul 2022 - Present</span>
+                            </div>
+                            <div class="experience-content">
+                                <p><strong>Key Responsibilities:</strong></p>
+                                <ul>
+                                    <li>Responsible for development, optimization and maintenance of cellular
+                                        calibration test tools based on C++ and C#</li>
+                                    <li>Led design, development and maintenance of 2G/3G/4G related functional modules
+                                        for tool production lines</li>
+                                    <li>Undertook design and development of GNSS debugging tools, meeting positioning
+                                        module debugging requirements</li>
+                                </ul>
+                                <p><strong>Key Achievements:</strong></p>
+                                <ul class="achievements">
+                                    <li>Awarded company "2022 Bay Area Rising Star" honor</li>
+                                </ul>
+                            </div>
+                        </div>
+
+
+                    </div>
                 </div>
-            </div>
         </section>
 
         <section id="projects" class="section">
@@ -68,50 +119,66 @@
                 <h2 class="section-title">Projects</h2>
                 <div class="project-filters">
                     <button class="filter-btn active" data-category="all">All</button>
-                    <button class="filter-btn" data-category="web">Web</button>
-                    <button class="filter-btn" data-category="mobile">Mobile</button>
+                    <button class="filter-btn" data-category="publications">Publications</button>
+                    <button class="filter-btn" data-category="mobile">Tools</button>
                 </div>
                 <div class="projects-grid">
-                    <article class="project-card" data-category="web">
+                    <article class="project-card" data-category="publications">
                         <div class="project-image">
-                            <img src="https://via.placeholder.com/400x250/4f46e5/ffffff?text=Project+One" alt="Screenshot of Project One web app interface" loading="lazy" />
+                            <img src="https://via.placeholder.com/400x250/4f46e5/ffffff?text=Project+One"
+                                alt="Screenshot of Project One web app interface" loading="lazy" />
                             <div class="project-overlay">
                                 <a href="#" class="project-link" aria-label="View Project One">
                                     <svg viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                                     </svg>
                                 </a>
                             </div>
                         </div>
                         <div class="project-content">
-                            <h3>Project One</h3>
-                            <p>A web application for managing tasks efficiently using React and Node.js.</p>
-                            <div class="project-tech">
-                                <span class="tech-tag">React</span>
-                                <span class="tech-tag">Node.js</span>
-                                <span class="tech-tag">MongoDB</span>
+                            <h3>Publications & Patents</h3>
+                            <div class="publication-item">
+                                <h4>Journal Publication</h4>
+                                <p><strong>Atmospheric Environment：</strong> <a
+                                        href="https://www.sciencedirect.com/science/article/abs/pii/S1352231022003478"
+                                        target="_blank" rel="noopener noreferrer">Remote
+                                        sensing estimation of surface
+                                        PM2.5 concentrations using a deep learning model improved by data augmentation
+                                        and a
+                                        particle size constraint</a></p>
+                            </div>
+                            <div class="publication-item">
+                                <h4>Patent</h4>
+                                <p><strong>Invention Patent：</strong> <a
+                                        href="https://patents.google.com/patent/CN114334027A/zh" target="_blank"
+                                        rel="noopener noreferrer">PM2.5 Deep Learning
+                                        Remote Sensing Estimation
+                                        Method with Particle Size Constraints </a></p>
                             </div>
                         </div>
                     </article>
 
-                    <article class="project-card" data-category="mobile">
+                    <article class="project-card" data-category="Tools">
                         <div class="project-image">
-                            <img src="https://via.placeholder.com/400x250/06b6d4/ffffff?text=Project+Two" alt="Screenshot of Project Two mobile app interface" loading="lazy" />
+                            <img src="https://via.placeholder.com/400x250/06b6d4/ffffff?text=Project+Two"
+                                alt="Screenshot of Tools for Cellular Network Optimization" loading="lazy" />
                             <div class="project-overlay">
                                 <a href="#" class="project-link" aria-label="View Project Two">
                                     <svg viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                                     </svg>
                                 </a>
                             </div>
                         </div>
                         <div class="project-content">
-                            <h3>Project Two</h3>
-                            <p>A mobile app for tracking fitness goals with cross-platform development.</p>
+                            <h3>Tools</h3>
+                            <p>Tools for Cellular Network Optimization.</p>
                             <div class="project-tech">
-                                <span class="tech-tag">Flutter</span>
-                                <span class="tech-tag">Dart</span>
-                                <span class="tech-tag">Firebase</span>
+                                <span class="tech-tag">Simba</span>
+                                <span class="tech-tag">Pandora</span>
+                                <span class="tech-tag">GNSS Tool</span>
                             </div>
                         </div>
                     </article>
@@ -124,33 +191,28 @@
                 <h2 class="section-title">Skills</h2>
                 <div class="skills-grid">
                     <div class="skill-category">
-                        <h3>Frontend</h3>
+                        <h3>Languages</h3>
                         <div class="skills-list">
+                            <span class="skill-item">C++</span>
+                            <span class="skill-item">C#</span>
                             <span class="skill-item">HTML5 & CSS3</span>
                             <span class="skill-item">JavaScript (ES6+)</span>
-                            <span class="skill-item">React</span>
-                            <span class="skill-item">Vue.js</span>
-                            <span class="skill-item">TypeScript</span>
+                            <span class="skill-item">Python</span>
                         </div>
                     </div>
                     <div class="skill-category">
                         <h3>Backend</h3>
                         <div class="skills-list">
-                            <span class="skill-item">Node.js</span>
-                            <span class="skill-item">Express</span>
-                            <span class="skill-item">MongoDB</span>
-                            <span class="skill-item">PostgreSQL</span>
-                            <span class="skill-item">REST APIs</span>
+                            <span class="skill-item">SQLite</span>
+                            <span class="skill-item">MySQL</span>
                         </div>
                     </div>
                     <div class="skill-category">
                         <h3>Tools & Others</h3>
                         <div class="skills-list">
                             <span class="skill-item">Git & GitHub</span>
-                            <span class="skill-item">Docker</span>
-                            <span class="skill-item">AWS</span>
-                            <span class="skill-item">Responsive Design</span>
-                            <span class="skill-item">Accessibility (a11y)</span>
+                            <span class="skill-item">Qt</span>
+                            <span class="skill-item">Blazor</span>
                         </div>
                     </div>
                 </div>
@@ -188,7 +250,8 @@
                         </div>
                         <div class="form-group">
                             <label for="message">Message</label>
-                            <textarea id="message" name="message" rows="5" required aria-describedby="message-error"></textarea>
+                            <textarea id="message" name="message" rows="5" required
+                                aria-describedby="message-error"></textarea>
                             <div class="error-message" id="message-error"></div>
                         </div>
                         <button type="submit" class="submit-btn">
@@ -205,7 +268,8 @@
         <div class="container">
             <p>&copy; 2025 My Developer Portfolio. All rights reserved.</p>
             <div class="social-links">
-                <a href="https://github.com/shunchaoyin" aria-label="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://github.com/shunchaoyin" aria-label="GitHub" target="_blank"
+                    rel="noopener noreferrer">GitHub</a>
                 <a href="#" aria-label="LinkedIn">LinkedIn</a>
                 <a href="#" aria-label="Twitter">Twitter</a>
             </div>
@@ -214,10 +278,11 @@
 
     <div id="scroll-to-top" class="scroll-to-top" aria-label="Scroll to top">
         <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"/>
+            <path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z" />
         </svg>
     </div>
 
     <script src="script.js"></script>
 </body>
+
 </html>

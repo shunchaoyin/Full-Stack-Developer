@@ -3,6 +3,8 @@ class Portfolio {
         this.init();
         this.bindEvents();
         this.setupIntersectionObserver();
+         // 初始化 EmailJS
+        this.initEmailJS();
     }
 
     init() {
@@ -25,7 +27,10 @@ class Portfolio {
         // Initialize scroll effects
         this.initScrollEffects();
     }
-
+    initEmailJS() {
+        // 替换为您的 EmailJS Public Key
+        emailjs.init('3noSArc0a-V3cJKqL');
+    }
     bindEvents() {
         // Navigation toggle
         this.navToggle?.addEventListener('click', () => this.toggleMobileNav());
@@ -357,14 +362,35 @@ class Portfolio {
         }
     }
 
-    async simulateFormSubmission(data) {
-        // Simulate API call
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                console.log('Form submitted:', data);
-                resolve();
-            }, 2000);
-        });
+ async simulateFormSubmission(data) {
+        // 替换模拟提交为真实的邮件发送
+        try {
+            const templateParams = {
+                from_name: data.name,           // 表单填写者的姓名
+                from_email: data.email,         // 表单填写者的邮箱
+                message: data.message,          // 表单消息内容
+                to_email: 'shunchaoyin@gmail.com',  // 您的邮箱（固定收件人）
+                to_name: 'Yinshunchao'         // 您的姓名（固定收件人）
+            };
+
+            console.log('Sending email with params:', templateParams); // 调试信息
+
+            const response = await emailjs.send(
+                'service_gov84x7',    // 替换为您的 Service ID
+                'template_00bv03c',   // 替换为您的 Template ID
+                templateParams
+            );
+            // Log the response for debugging
+            console.log('EmailJS response:', response);
+            if (response.status !== 200) {
+                throw new Error(`EmailJS error: ${response.status} - ${response.text}`);
+            }
+            console.log('Email sent successfully:', response);
+            return response;
+        } catch (error) {
+            console.error('Email send failed:', error);
+            throw error;
+        }
     }
 
     showFormSuccess() {
