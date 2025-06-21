@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS定位</title>
+    <style>
+        .box {
+            width: 200px;
+            height: 100px;
+            background-color: lightblue;
+            position: relative;
+            margin: 10px;
+        }
+        .box::after {
+            content: "绝对定位";
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: white;
+            padding: 5px;
+            border: 1px solid blue;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        定位示例
+    </div>
+    <div class="box" style="position: absolute; top: 50px; left: 50px; color: red;">
+        绝对定位示例
+    </div>
+    <div class="box" style="position: fixed; bottom: 20px; right: 20px;color: green;">
+        固定定位示例
+    </div>
+    <div class="box" style="position: sticky; top: 0; color: yellow;">
+        粘性定位示例
+    </div>
+    <div class="box" style="position: relative; left: 20px; top: 20px;color: purple;">
+        相对定位示例
+    </div>
+    <div class="box" style="position: absolute; left: 0; top: 0;color: orange;">
+        绝对定位在容器内
+    </div>
+    <div class="box" style="position: fixed; left: 0; top: 0;color: pink;">
+        固定定位在视口内
+    </div>  
+</body>
+</html>

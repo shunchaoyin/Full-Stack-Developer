@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS DOM</title>
+</head>
+<body>
+    <div id="container">
+        <h1>JS DOM Manipulation</h1>
+        <p>This is a paragraph.</p>
+       <div id="box1">
+           这是一个选择器标签
+        </div>
+        <div class="box2">
+            这是一个类选择器标签
+        </div>
+        <div>普通的Div标签</div>
+
+        <button>click me</button>
+        <script>
+            // 获取元素
+            const container = document.getElementById('container');
+            const box1 = document.getElementById('box1');
+            const box2 = document.querySelector('.box2');
+
+            // 修改内容
+            container.style.backgroundColor = 'lightblue';
+            box1.textContent = '这是修改后的选择器标签';
+            box2.textContent = '这是修改后的类选择器标签';
+
+            // 添加新元素
+            const newDiv = document.createElement('div');
+            newDiv.textContent = '这是一个新添加的Div标签';
+            container.appendChild(newDiv);
+
+            // 添加事件监听器
+            const buttons = document.getElementsByTagName('button');
+            buttons[0].addEventListener('click', () => {
+                box1.textContent = '这是通过按钮修改后的选择器标签';
+            });
+
+        </script>
+</body>
+</html>

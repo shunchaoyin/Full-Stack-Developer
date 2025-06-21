@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A developer portfolio for accessibility, SEO, and semantic best practices.">
+    <meta name="keywords" content="developer, portfolio, web development, JavaScript, HTML, CSS">
+    <meta name="author" content="Snowball">
+    <title>My Developer Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav role="navigation" aria-label="Main Navigation">
+            <div class="nav-brand">
+                <h1 class="logo">Portfolio</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#about-me">About Me</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <button class="nav-toggle" aria-label="Toggle navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">Hello, I'm <span class="highlight">Snowball</span></h1>
+                <p class="hero-subtitle">Passionate Full-Stack Developer</p>
+                <a href="#contact" class="cta-button">Get In Touch</a>
+            </div>
+        </section>
+
+        <section id="about-me" class="section">
+            <div class="container">
+                <h2 class="section-title">About Me</h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>Hello! I'm a passionate developer with experience in web development, accessibility, and building great user experiences. I love creating digital solutions that make a difference.</p>
+                        <p>With expertise in modern web technologies, I focus on creating responsive, accessible, and performant applications.</p>
+                    </div>
+                    <div class="about-stats">
+                        <div class="stat">
+                            <span class="stat-number">50+</span>
+                            <span class="stat-label">Projects</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">3+</span>
+                            <span class="stat-label">Years Experience</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="section">
+            <div class="container">
+                <h2 class="section-title">Projects</h2>
+                <div class="project-filters">
+                    <button class="filter-btn active" data-category="all">All</button>
+                    <button class="filter-btn" data-category="web">Web</button>
+                    <button class="filter-btn" data-category="mobile">Mobile</button>
+                </div>
+                <div class="projects-grid">
+                    <article class="project-card" data-category="web">
+                        <div class="project-image">
+                            <img src="https://via.placeholder.com/400x250/4f46e5/ffffff?text=Project+One" alt="Screenshot of Project One web app interface" loading="lazy" />
+                            <div class="project-overlay">
+                                <a href="#" class="project-link" aria-label="View Project One">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <h3>Project One</h3>
+                            <p>A web application for managing tasks efficiently using React and Node.js.</p>
+                            <div class="project-tech">
+                                <span class="tech-tag">React</span>
+                                <span class="tech-tag">Node.js</span>
+                                <span class="tech-tag">MongoDB</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="project-card" data-category="mobile">
+                        <div class="project-image">
+                            <img src="https://via.placeholder.com/400x250/06b6d4/ffffff?text=Project+Two" alt="Screenshot of Project Two mobile app interface" loading="lazy" />
+                            <div class="project-overlay">
+                                <a href="#" class="project-link" aria-label="View Project Two">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <h3>Project Two</h3>
+                            <p>A mobile app for tracking fitness goals with cross-platform development.</p>
+                            <div class="project-tech">
+                                <span class="tech-tag">Flutter</span>
+                                <span class="tech-tag">Dart</span>
+                                <span class="tech-tag">Firebase</span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="section">
+            <div class="container">
+                <h2 class="section-title">Skills</h2>
+                <div class="skills-grid">
+                    <div class="skill-category">
+                        <h3>Frontend</h3>
+                        <div class="skills-list">
+                            <span class="skill-item">HTML5 & CSS3</span>
+                            <span class="skill-item">JavaScript (ES6+)</span>
+                            <span class="skill-item">React</span>
+                            <span class="skill-item">Vue.js</span>
+                            <span class="skill-item">TypeScript</span>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <h3>Backend</h3>
+                        <div class="skills-list">
+                            <span class="skill-item">Node.js</span>
+                            <span class="skill-item">Express</span>
+                            <span class="skill-item">MongoDB</span>
+                            <span class="skill-item">PostgreSQL</span>
+                            <span class="skill-item">REST APIs</span>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <h3>Tools & Others</h3>
+                        <div class="skills-list">
+                            <span class="skill-item">Git & GitHub</span>
+                            <span class="skill-item">Docker</span>
+                            <span class="skill-item">AWS</span>
+                            <span class="skill-item">Responsive Design</span>
+                            <span class="skill-item">Accessibility (a11y)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="section">
+            <div class="container">
+                <h2 class="section-title">Contact</h2>
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <h3>Get In Touch</h3>
+                        <p>I'm always open to discussing new opportunities and interesting projects.</p>
+                        <div class="contact-methods">
+                            <a href="mailto:shunchaoyin@gmail.com" class="contact-method">
+                                <span class="contact-icon">📧</span>
+                                shunchaoyin@gmail.com
+                            </a>
+                            <a href="tel:+8615976976630" class="contact-method">
+                                <span class="contact-icon">📱</span>
+                                +86 15976976630
+                            </a>
+                        </div>
+                    </div>
+                    <form class="contact-form" aria-label="Contact Form" novalidate>
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" required aria-describedby="name-error">
+                            <div class="error-message" id="name-error"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required aria-describedby="email-error">
+                            <div class="error-message" id="email-error"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="5" required aria-describedby="message-error"></textarea>
+                            <div class="error-message" id="message-error"></div>
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            <span class="btn-text">Send Message</span>
+                            <span class="btn-loading">Sending...</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 My Developer Portfolio. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://github.com/shunchaoyin" aria-label="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="#" aria-label="LinkedIn">LinkedIn</a>
+                <a href="#" aria-label="Twitter">Twitter</a>
+            </div>
+        </div>
+    </footer>
+
+    <div id="scroll-to-top" class="scroll-to-top" aria-label="Scroll to top">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"/>
+        </svg>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

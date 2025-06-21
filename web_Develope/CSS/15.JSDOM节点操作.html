@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS DOM Node Manipulation</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        </style>
+</head>
+<body>
+    <h1 style="text-align: center;">表格的增删改查</h1>
+    <button onclick="addRow()">添加数据</button>
+    <br>
+    <br>
+    <table>
+        <tr>
+            <th>姓名</th>
+            <th>联系方式</th>
+            <th>操作</th>
+        </tr>
+        <tr>
+            <td>张三</td>
+            <td>1234567890</td>
+            <td>
+                <button onclick="editRow(this)">编辑</button>
+                <button onclick="deleteRow(this)">删除</button>
+            </td>
+        </tr>
+    </table>
+    <script src="./js/table.js"> </script>
+</body>
+</html>

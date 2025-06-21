@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Events</title>
+</head>
+<body>
+    <h1>JavaScript Events</h1>
+    <button onclick="handleClick()">Click Me!</button>
+    <input type="text" onfocus="focus_event()" onblur="blur_event()" placeholder="Type something...">
+    <script>
+        function handleClick() {
+            alert("Button was clicked!");
+            console.log("Button was clicked!");
+        }
+        function focus_event() {
+            console.log("Input field focused.");
+        }
+        function blur_event() {
+            console.log("Input field lost focus.");
+        }
+    </script>
+</body>
+</html>

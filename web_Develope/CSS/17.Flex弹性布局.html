@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flex弹性布局</title>
+    <style>
+        html, body {
+            margin: 0; /* 清除默认外边距 */
+            padding: 0; /* 清除默认内边距 */
+            font-family: Arial, sans-serif; /* 设置字体 */
+            font-size: 10px;
+        }
+        .container{
+            display: flex; /* 启用Flex布局 */
+            flex-wrap: wrap; /* 允许子元素换行 */
+            justify-content: space-around; /* 子元素之间的间距均匀分布 */
+            align-items: center; /* 子元素在交叉轴上居中对齐 */
+            height: 100vh; /* 设置容器高度为视口高度 */
+        }
+        .item {
+            background-color: lightblue; /* 设置背景颜色 */
+            border: 1px solid blue; /* 设置边框 */
+            padding: 20px; /* 设置内边距 */
+            margin: 10px; /* 设置外边距 */
+            flex: 1 1 150px; /* 弹性子元素，允许缩放，最小宽度150px */
+            text-align: center; /* 文本居中对齐 */
+        }
+    </style>
+</head>
+<body>
+    <h1>Flex弹性布局</h1>
+    <div class="container">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+        <div class="item">4</div>
+        <div class="item">5</div>
+        <div class="item">6</div>
+    </div>
+</body>
+</html>

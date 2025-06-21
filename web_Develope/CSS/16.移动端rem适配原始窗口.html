@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>移动端rem适配原始窗口</title>
+    <style>
+        /* 设置根元素字体大小 */
+        <!-- html {
+            font-size: 16px; /* 假设根元素字体大小为16px */
+        } -->
+        /* 使用rem单位的样式 */
+        .box-px {
+            width: 100px;
+            height: 100px;
+            background-color: lightblue;
+            padding: 10px;
+            border: 2px solid blue;
+            margin: 5px;
+        }
+        /* 使用rem单位的样式 */
+        .box-rem {
+            width: 5rem; /* 假设根元素字体大小为16px，则5rem = 80px */
+            height: 5rem; /* 同上 */
+            background-color: lightcoral;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div>窗口</div>
+        <div class="box-px">100px</div>
+        <div class="box-rem">5rem</div>
+    </div>
+    <script>
+        // 设置根元素字体大小为屏幕宽度的1/10
+        function resetFontSize() {
+            const width = document.documentElement.clientWidth / 10 + 'px'; // 获取视口宽度
+            document.documentElement.style.fontSize = width;
+        }
+        resetFontSize();
+        //绑定事件
+        window.addEventListener('resize', resetFontSize); // 推荐的方式
+    </script>
+        
+</body>
+</html>
