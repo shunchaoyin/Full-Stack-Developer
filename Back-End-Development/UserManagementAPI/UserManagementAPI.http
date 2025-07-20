@@ -1,0 +1,97 @@
+@UserManagementAPI_HostAddress = http://localhost:5011
+
+### 测试API根路径 - 应该显示Swagger UI
+GET {{UserManagementAPI_HostAddress}}/
+
+###
+
+### 获取所有用户
+GET {{UserManagementAPI_HostAddress}}/api/users
+Accept: application/json
+
+###
+
+### 获取特定用户 (ID: 1)
+GET {{UserManagementAPI_HostAddress}}/api/users/1
+Accept: application/json
+
+###
+
+### 获取不存在的用户 (ID: 999)
+GET {{UserManagementAPI_HostAddress}}/api/users/999
+Accept: application/json
+
+###
+
+### 创建新用户
+POST {{UserManagementAPI_HostAddress}}/api/users
+Content-Type: application/json
+
+{
+  "name": "David Wilson",
+  "email": "david@techhive.com"
+}
+
+###
+
+### 创建用户 - 邮箱已存在（应该返回409冲突）
+POST {{UserManagementAPI_HostAddress}}/api/users
+Content-Type: application/json
+
+{
+  "name": "Another Alice",
+  "email": "alice@techhive.com"
+}
+
+###
+
+### 创建用户 - 无效数据（应该返回400错误）
+POST {{UserManagementAPI_HostAddress}}/api/users
+Content-Type: application/json
+
+{
+  "name": "A",
+  "email": "invalid-email"
+}
+
+###
+
+### 更新用户 (ID: 1)
+PUT {{UserManagementAPI_HostAddress}}/api/users/1
+Content-Type: application/json
+
+{
+  "name": "Alice Smith Updated",
+  "email": "alice.smith.updated@techhive.com",
+  "isActive": true
+}
+
+###
+
+### 更新不存在的用户 (ID: 999)
+PUT {{UserManagementAPI_HostAddress}}/api/users/999
+Content-Type: application/json
+
+{
+  "name": "Non Existent User",
+  "email": "nonexistent@techhive.com",
+  "isActive": true
+}
+
+###
+
+### 获取活跃用户
+GET {{UserManagementAPI_HostAddress}}/api/users/active
+Accept: application/json
+
+###
+
+### 删除用户 (ID: 3)
+DELETE {{UserManagementAPI_HostAddress}}/api/users/3
+
+###
+
+### 删除不存在的用户 (ID: 999)
+DELETE {{UserManagementAPI_HostAddress}}/api/users/999
+
+###

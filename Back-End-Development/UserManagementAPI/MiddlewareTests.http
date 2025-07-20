@@ -1,0 +1,64 @@
+###
+# 测试中间件功能
+# 这个文件包含了用于测试日志、错误处理和认证中间件的请求
+
+###
+# 1. 测试无 API Key 的请求（应该返回 401）
+GET {{baseUrl}}/api/users
+Content-Type: application/json
+
+###
+# 2. 测试错误 API Key 的请求（应该返回 401）
+GET {{baseUrl}}/api/users
+Content-Type: application/json
+X-API-KEY: wrongkey
+
+###
+# 3. 测试正确 API Key 的请求（应该成功并记录日志）
+GET {{baseUrl}}/api/users
+Content-Type: application/json
+X-API-KEY: SecretApiKey123
+
+###
+# 4. 测试创建用户（带正确 API Key）
+POST {{baseUrl}}/api/users
+Content-Type: application/json
+X-API-KEY: SecretApiKey123
+
+{
+    "name": "测试用户",
+    "email": "test@example.com"
+}
+
+###
+# 5. 测试获取特定用户（带正确 API Key）
+GET {{baseUrl}}/api/users/1
+Content-Type: application/json
+X-API-KEY: SecretApiKey123
+
+###
+# 6. 测试错误处理 - 获取不存在的用户（带正确 API Key）
+GET {{baseUrl}}/api/users/999
+Content-Type: application/json
+X-API-KEY: SecretApiKey123
+
+###
+# 7. 测试创建用户时的验证错误（带正确 API Key）
+POST {{baseUrl}}/api/users
+Content-Type: application/json
+X-API-KEY: SecretApiKey123
+
+{
+    "name": "",
+    "email": "invalid-email"
+}
+
+###
+# 8. 测试全局异常处理中间件
+GET {{baseUrl}}/api/users/test-exception
+Content-Type: application/json
+X-API-KEY: SecretApiKey123
+
+###
+# 变量定义
+@baseUrl = https://localhost:7001

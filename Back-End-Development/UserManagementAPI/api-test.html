@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management API 测试工具</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .response {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border-left: 4px solid #007bff;
+        }
+
+        .error {
+            border-left-color: #dc3545;
+            background-color: #f8d7da;
+        }
+
+        .success {
+            border-left-color: #28a745;
+            background-color: #d4edda;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🚀 User Management API 测试工具</h1>
+
+        <div class="form-group">
+            <label for="apiKey">API Key:</label>
+            <input type="text" id="apiKey" value="SecretApiKey123" placeholder="输入你的 API Key">
+        </div>
+
+        <div class="form-group">
+            <label for="baseUrl">API 基础 URL:</label>
+            <input type="text" id="baseUrl" value="http://localhost:5000/api" placeholder="API 基础 URL">
+        </div>
+
+        <div class="form-group">
+            <label for="operation">选择操作:</label>
+            <select id="operation">
+                <option value="GET /users">获取所有用户</option>
+                <option value="GET /users/active">获取活跃用户</option>
+                <option value="GET /users/{id}">根据ID获取用户</option>
+                <option value="POST /users">创建新用户</option>
+                <option value="PUT /users/{id}">更新用户</option>
+                <option value="DELETE /users/{id}">删除用户</option>
+                <option value="GET /users/test-exception">测试异常处理</option>
+            </select>
+        </div>
+
+        <div class="form-group" id="userIdGroup" style="display: none;">
+            <label for="userId">用户 ID:</label>
+            <input type="number" id="userId" placeholder="输入用户 ID">
+        </div>
+
+        <div class="form-group" id="userDataGroup" style="display: none;">
+            <label for="userData">用户数据 (JSON):</label>
+            <textarea id="userData" rows="6" placeholder='{"name": "张三", "email": "zhangsan@example.com"}'></textarea>
+        </div>
+
+        <button onclick="sendRequest()">发送请求</button>
+        <button onclick="clearResponse()">清除结果</button>
+
+        <div id="response" class="response" style="display: none;">
+            <h3>响应结果:</h3>
+            <pre id="responseContent"></pre>
+        </div>
+    </div>
+
+    <script>
+        const operationSelect = document.getElementById('operation');
+        const userIdGroup = document.getElementById('userIdGroup');
+        const userDataGroup = document.getElementById('userDataGroup');
+        const userDataTextarea = document.getElementById('userData');
+
+        operationSelect.addEventListener('change', function () {
+            const operation = this.value;
+
+            // 显示/隐藏用户ID输入框
+            if (operation.includes('{id}')) {
+                userIdGroup.style.display = 'block';
+            } else {
+                userIdGroup.style.display = 'none';
+            }
+
+            // 显示/隐藏用户数据输入框
+            if (operation.includes('POST') || operation.includes('PUT')) {
+                userDataGroup.style.display = 'block';
+
+                if (operation.includes('POST')) {
+                    userDataTextarea.value = '{\n  "name": "张三",\n  "email": "zhangsan@example.com"\n}';
+                } else if (operation.includes('PUT')) {
+                    userDataTextarea.value = '{\n  "name": "李四",\n  "email": "lisi@example.com",\n  "isActive": true\n}';
+                }
+            } else {
+                userDataGroup.style.display = 'none';
+            }
+        });
+
+        async function sendRequest() {
+            const apiKey = document.getElementById('apiKey').value;
+            const baseUrl = document.getElementById('baseUrl').value;
+            const operation = document.getElementById('operation').value;
+            const userId = document.getElementById('userId').value;
+            const userData = document.getElementById('userData').value;
+
+            if (!apiKey) {
+                showResponse('请输入 API Key', 'error');
+                return;
+            }
+
+            const [method, path] = operation.split(' ');
+            let url = baseUrl + path.replace('{id}', userId);
+
+            const options = {
+                method: method,
+                headers: {
+                    'X-API-KEY': apiKey,
+                    'Content-Type': 'application/json'
+                }
+            };
+
+            if (method === 'POST' || method === 'PUT') {
+                if (!userData) {
+                    showResponse('请输入用户数据', 'error');
+                    return;
+                }
+                try {
+                    JSON.parse(userData); // 验证JSON格式
+                    options.body = userData;
+                } catch (e) {
+                    showResponse('用户数据不是有效的JSON格式', 'error');
+                    return;
+                }
+            }
+
+            try {
+                showResponse('正在发送请求...', 'info');
+                const response = await fetch(url, options);
+                const responseText = await response.text();
+
+                let responseData;
+                try {
+                    responseData = JSON.parse(responseText);
+                } catch (e) {
+                    responseData = responseText;
+                }
+
+                const result = {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: Object.fromEntries(response.headers.entries()),
+                    data: responseData
+                };
+
+                const className = response.ok ? 'success' : 'error';
+                showResponse(JSON.stringify(result, null, 2), className);
+
+            } catch (error) {
+                showResponse('网络错误: ' + error.message, 'error');
+            }
+        }
+
+        function showResponse(content, className = '') {
+            const responseDiv = document.getElementById('response');
+            const responseContent = document.getElementById('responseContent');
+
+            responseDiv.style.display = 'block';
+            responseDiv.className = 'response ' + className;
+            responseContent.textContent = content;
+        }
+
+        function clearResponse() {
+            document.getElementById('response').style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>
