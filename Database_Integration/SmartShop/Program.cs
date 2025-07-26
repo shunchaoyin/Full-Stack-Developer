@@ -7,95 +7,211 @@ namespace SmartShop
     {
         static void Main(string[] args)
         {
-            using (var connection = new SqliteConnection("Data Source=smartshop.db"))
+            // 使用文件数据库，以便数据持久化
+            var connectionString = "Data Source=smartshop.db";
+            // 每次运行时删除旧数据库，以确保数据是干净的
+            if (System.IO.File.Exists("smartshop.db"))
+            {
+                System.IO.File.Delete("smartshop.db");
+            }
+
+            using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
+                InitializeDatabase(connection);
 
-                // 创建表
-                var createTableCommand = connection.CreateCommand();
-                createTableCommand.CommandText =
-                @"
-                    CREATE TABLE IF NOT EXISTS Products (
-                        ProductId INTEGER PRIMARY KEY AUTOINCREMENT,
-                        ProductName TEXT NOT NULL,
-                        Category TEXT NOT NULL,
-                        Price REAL NOT NULL,
-                        StockLevel INTEGER NOT NULL
-                    );
-                ";
-                createTableCommand.ExecuteNonQuery();
+                Console.WriteLine("✅ 数据库和表示例数据已成功创建。");
+                Console.WriteLine(new string('=', 80));
 
-                // 插入示例数据
-                InsertSampleData(connection);
+                // --- Activity 1: Basic Queries ---
+                Console.WriteLine("\n### Activity 1: Basic SQL Queries ###");
+                RunActivity1Queries(connection);
 
-                Console.WriteLine("数据库和表示例数据已创建。");
-                Console.WriteLine("---------------------------------");
-
-                // 1. 检索所有产品详细信息
-                Console.WriteLine("所有产品:");
-                ExecuteQuery(connection, "SELECT ProductName, Category, Price, StockLevel FROM Products;");
-
-                // 2. 按类别筛选产品
-                Console.WriteLine("\n'Electronics' 类别下的产品:");
-                ExecuteQuery(connection, "SELECT ProductName, Category, Price, StockLevel FROM Products WHERE Category = 'Electronics';");
-
-                // 3. 筛选库存不足的产品 (例如，少于 10 件)
-                Console.WriteLine("\n库存不足的产品 (少于 10 件):");
-                ExecuteQuery(connection, "SELECT ProductName, Category, Price, StockLevel FROM Products WHERE StockLevel < 10;");
-
-                // 4. 按价格升序排序
-                Console.WriteLine("\n按价格升序排序的所有产品:");
-                ExecuteQuery(connection, "SELECT ProductName, Category, Price, StockLevel FROM Products ORDER BY Price ASC;");
+                // --- Activity 2: Complex Queries ---
+                Console.WriteLine("\n### Activity 2: Complex Queries with JOINs and Aggregation ###");
+                RunActivity2Queries(connection);
             }
         }
 
-        static void InsertSampleData(SqliteConnection connection)
+        static void InitializeDatabase(SqliteConnection connection)
         {
-            // 检查是否已有数据，避免重复插入
-            var checkCommand = connection.CreateCommand();
-            checkCommand.CommandText = "SELECT COUNT(*) FROM Products;";
-            long count = (long)checkCommand.ExecuteScalar();
+            var createTablesCommand = connection.CreateCommand();
+            createTablesCommand.CommandText =
+            @"
+                -- Products Table
+                CREATE TABLE IF NOT EXISTS Products (
+                    ProductId INTEGER PRIMARY KEY AUTOINCREMENT,
+                    ProductName TEXT NOT NULL,
+                    Category TEXT NOT NULL,
+                    Price REAL NOT NULL,
+                    StockLevel INTEGER NOT NULL
+                );
 
-            if (count == 0)
-            {
-                var insertCommand = connection.CreateCommand();
-                insertCommand.CommandText =
-                @"
-                    INSERT INTO Products (ProductName, Category, Price, StockLevel) VALUES
-                    ('Laptop', 'Electronics', 1200.50, 15),
-                    ('Smartphone', 'Electronics', 800.00, 25),
-                    ('Coffee Maker', 'Home Appliances', 50.75, 8),
-                    ('Desk Chair', 'Furniture', 150.00, 5),
-                    ('T-shirt', 'Apparel', 25.99, 50);
-                ";
-                insertCommand.ExecuteNonQuery();
-            }
+                -- Suppliers Table
+                CREATE TABLE IF NOT EXISTS Suppliers (
+                    SupplierId INTEGER PRIMARY KEY AUTOINCREMENT,
+                    SupplierName TEXT NOT NULL,
+                    ContactInfo TEXT
+                );
+
+                -- Sales Table
+                CREATE TABLE IF NOT EXISTS Sales (
+                    SaleId INTEGER PRIMARY KEY AUTOINCREMENT,
+                    ProductId INTEGER,
+                    StoreLocation TEXT NOT NULL,
+                    SaleDate TEXT NOT NULL,
+                    UnitsSold INTEGER NOT NULL,
+                    FOREIGN KEY (ProductId) REFERENCES Products(ProductId)
+                );
+
+                -- Deliveries Table (for tracking supplier performance)
+                CREATE TABLE IF NOT EXISTS Deliveries (
+                    DeliveryId INTEGER PRIMARY KEY AUTOINCREMENT,
+                    ProductId INTEGER,
+                    SupplierId INTEGER,
+                    QuantityDelivered INTEGER NOT NULL,
+                    ExpectedDate TEXT NOT NULL,
+                    ActualDate TEXT NOT NULL,
+                    FOREIGN KEY (ProductId) REFERENCES Products(ProductId),
+                    FOREIGN KEY (SupplierId) REFERENCES Suppliers(SupplierId)
+                );
+            ";
+            createTablesCommand.ExecuteNonQuery();
+
+            // Insert Sample Data
+            var insertDataCommand = connection.CreateCommand();
+            insertDataCommand.CommandText =
+            @"
+                -- Insert Products
+                INSERT INTO Products (ProductName, Category, Price, StockLevel) VALUES
+                ('Laptop Pro', 'Electronics', 1499.99, 15),
+                ('Smartphone X', 'Electronics', 899.50, 25),
+                ('Espresso Machine', 'Home Appliances', 199.00, 8),
+                ('Ergonomic Chair', 'Furniture', 250.00, 5),
+                ('Organic Cotton T-shirt', 'Apparel', 29.99, 50);
+
+                -- Insert Suppliers
+                INSERT INTO Suppliers (SupplierName, ContactInfo) VALUES
+                ('Tech Imports Inc.', 'contact@techimports.com'),
+                ('Appliance Masters', 'sales@appliancemasters.net'),
+                ('Fashion Forward', 'support@fashionforward.co');
+
+                -- Insert Sales
+                INSERT INTO Sales (ProductId, StoreLocation, SaleDate, UnitsSold) VALUES
+                (1, 'Downtown', '2025-07-20', 1),
+                (2, 'Uptown', '2025-07-21', 2),
+                (4, 'Downtown', '2025-07-22', 1),
+                (1, 'Online', '2025-07-23', 3);
+
+                -- Insert Deliveries
+                INSERT INTO Deliveries (ProductId, SupplierId, QuantityDelivered, ExpectedDate, ActualDate) VALUES
+                (1, 1, 20, '2025-07-10', '2025-07-12'), -- 2 days delay
+                (2, 1, 30, '2025-07-11', '2025-07-11'), -- On time
+                (3, 2, 15, '2025-07-15', '2025-07-18'), -- 3 days delay
+                (5, 3, 100, '2025-07-18', '2025-07-18'); -- On time
+            ";
+            insertDataCommand.ExecuteNonQuery();
+        }
+
+        static void RunActivity1Queries(SqliteConnection connection)
+        {
+            // 1. 检索所有产品详细信息
+            Console.WriteLine("\n1. 所有产品详细信息:");
+            ExecuteQuery(connection, "SELECT ProductName, Category, Price, StockLevel FROM Products;");
+
+            // 2. 按类别筛选产品
+            Console.WriteLine("\n2. 'Electronics' 类别下的产品:");
+            ExecuteQuery(connection, "SELECT ProductName, Category, Price, StockLevel FROM Products WHERE Category = 'Electronics';");
+
+            // 3. 筛选库存不足的产品 (例如，少于 10 件)
+            Console.WriteLine("\n3. 库存不足的产品 (少于 10 件):");
+            ExecuteQuery(connection, "SELECT ProductName, Category, Price, StockLevel FROM Products WHERE StockLevel < 10;");
+
+            // 4. 按价格升序排序
+            Console.WriteLine("\n4. 按价格升序排序的所有产品:");
+            ExecuteQuery(connection, "SELECT ProductName, Category, Price, StockLevel FROM Products ORDER BY Price ASC;");
+        }
+
+        static void RunActivity2Queries(SqliteConnection connection)
+        {
+            // 1. 连接 Products 和 Sales 表
+            Console.WriteLine("\n1. 产品销售报告 (连接查询):");
+            ExecuteQuery(connection, @"
+                SELECT
+                    p.ProductName,
+                    s.SaleDate,
+                    s.StoreLocation,
+                    s.UnitsSold
+                FROM Sales s
+                JOIN Products p ON s.ProductId = p.ProductId;
+            ");
+
+            // 2. 计算每个产品的总销售量 (聚合查询)
+            Console.WriteLine("\n2. 每个产品的总销售量 (聚合查询):");
+            ExecuteQuery(connection, @"
+                SELECT
+                    p.ProductName,
+                    SUM(s.UnitsSold) AS TotalUnitsSold
+                FROM Sales s
+                JOIN Products p ON s.ProductId = p.ProductId
+                GROUP BY p.ProductName
+                ORDER BY TotalUnitsSold DESC;
+            ");
+
+            // 3. 识别交货延迟最多的供应商 (子查询)
+            Console.WriteLine("\n3. 供应商交货表现 (子查询):");
+            ExecuteQuery(connection, @"
+                SELECT
+                    s.SupplierName,
+                    AVG(JULIANDAY(d.ActualDate) - JULIANDAY(d.ExpectedDate)) AS AverageDelayInDays
+                FROM Deliveries d
+                JOIN Suppliers s ON d.SupplierId = s.SupplierId
+                GROUP BY s.SupplierName
+                ORDER BY AverageDelayInDays DESC;
+            ");
         }
 
         static void ExecuteQuery(SqliteConnection connection, string query)
         {
-            var command = connection.CreateCommand();
-            command.CommandText = query;
-
-            using (var reader = command.ExecuteReader())
+            try
             {
-                // 打印表头
-                for (int i = 0; i < reader.FieldCount; i++)
-                {
-                    Console.Write($"{reader.GetName(i),-20}");
-                }
-                Console.WriteLine();
-                Console.WriteLine(new string('-', 80));
+                var command = connection.CreateCommand();
+                command.CommandText = query;
 
-                // 打印数据行
-                while (reader.Read())
+                using (var reader = command.ExecuteReader())
                 {
+                    if (!reader.HasRows)
+                    {
+                        Console.WriteLine("未找到结果。");
+                        return;
+                    }
+
+                    // 打印表头
                     for (int i = 0; i < reader.FieldCount; i++)
                     {
-                        Console.Write($"{reader.GetValue(i),-20}");
+                        Console.Write($"{reader.GetName(i),-25}");
                     }
                     Console.WriteLine();
+                    Console.WriteLine(new string('-', 25 * reader.FieldCount));
+
+                    // 打印数据行
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            Console.Write($"{reader.GetValue(i),-25}");
+                        }
+                        Console.WriteLine();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"发生错误: {ex.Message}");
+            }
+            finally
+            {
+                Console.WriteLine();
             }
         }
     }
