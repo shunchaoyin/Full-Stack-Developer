@@ -113,3 +113,44 @@ By the end of this activity, you will have:
 - A set of queries ready for debugging and optimization in Activity 3.
 
 Save all complex queries in your sandbox environment.
+
+Step 1: Review the recap
+In Activity 2, you wrote complex SQL queries for SmartShop’s inventory and sales data. Some queries may have inefficiencies or errors, including:
+
+Slow execution times for large datasets.
+
+Incorrect JOIN or WHERE clauses causing errors.
+
+Inefficient use of aggregate functions.
+
+Step 2: Debug errors in SQL queries
+Use Copilot to identify and correct errors in:
+
+JOIN statements causing mismatched results.
+
+Nested queries with incorrect syntax.
+
+Step 3: Optimize query performance with Copilot
+Use Copilot to suggest and implement optimizations such as:
+
+Adding appropriate indexes to frequently queried columns.
+
+Restructuring queries for improved execution plans.
+
+Reducing unnecessary computations.
+
+Step 4: Test and validate the optimized queries
+Finally, use Copilot to test and validate.
+
+Run the optimized queries and compare their performance with the original versions.
+
+Ensure the results are accurate and the execution time is reduced.
+
+Step 5: Save your work
+By the end of this activity, you will have:
+
+Debugged and optimized complex SQL queries.
+
+A final set of high-performing queries for SmartShop’s database system.
+
+Save the debugged and optimized queries in your sandbox environment. These queries will serve as the final deliverables for the SmartShop Inventory System.

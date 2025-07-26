@@ -30,6 +30,10 @@ namespace SmartShop
                 // --- Activity 2: Complex Queries ---
                 Console.WriteLine("\n### Activity 2: Complex Queries with JOINs and Aggregation ###");
                 RunActivity2Queries(connection);
+
+                // --- Activity 3: Debugging and Optimization ---
+                Console.WriteLine("\n### Activity 3: Debugging and Optimization ###");
+                RunActivity3Tasks(connection);
             }
         }
 
@@ -171,8 +175,69 @@ namespace SmartShop
             ");
         }
 
-        static void ExecuteQuery(SqliteConnection connection, string query)
+        static void RunActivity3Tasks(SqliteConnection connection)
         {
+            Console.WriteLine("\n--- 演示查询优化 ---");
+            string complexQuery = @"
+                SELECT
+                    s.SupplierName,
+                    AVG(JULIANDAY(d.ActualDate) - JULIANDAY(d.ExpectedDate)) AS AverageDelayInDays
+                FROM Deliveries d
+                JOIN Suppliers s ON d.SupplierId = s.SupplierId
+                WHERE p.Category = 'Electronics'
+                GROUP BY s.SupplierName
+                ORDER BY AverageDelayInDays DESC;
+            ";
+
+            // 为了让查询更复杂以显示优化效果，我们稍微修改一下，加入 Products 表
+            string queryToOptimize = @"
+                SELECT
+                    s.SupplierName,
+                    AVG(JULIANDAY(d.ActualDate) - JULIANDAY(d.ExpectedDate)) AS AverageDelayInDays
+                FROM Deliveries d
+                JOIN Suppliers s ON d.SupplierId = s.SupplierId
+                JOIN Products p ON d.ProductId = p.ProductId
+                WHERE p.Category = 'Electronics'
+                GROUP BY s.SupplierName
+                ORDER BY AverageDelayInDays DESC;
+            ";
+
+            Console.WriteLine("\n1. 运行未经优化的查询...");
+            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+            ExecuteQuery(connection, queryToOptimize, "未经优化的查询");
+            stopwatch.Stop();
+            Console.WriteLine($"⏱️  执行时间: {stopwatch.Elapsed.TotalMilliseconds} ms");
+
+            Console.WriteLine("\n2. 正在创建索引以进行优化...");
+            CreateIndexes(connection);
+            Console.WriteLine("✅ 索引已成功创建。");
+
+            Console.WriteLine("\n3. 运行优化后的查询...");
+            stopwatch.Restart();
+            ExecuteQuery(connection, queryToOptimize, "优化后的查询");
+            stopwatch.Stop();
+            Console.WriteLine($"⏱️  执行时间: {stopwatch.Elapsed.TotalMilliseconds} ms");
+            Console.WriteLine("\n💡 注意: 在大型数据库中，索引对性能的提升会更加显著。");
+        }
+
+        static void CreateIndexes(SqliteConnection connection)
+        {
+            var command = connection.CreateCommand();
+            command.CommandText = @"
+                CREATE INDEX IF NOT EXISTS idx_sales_product_id ON Sales(ProductId);
+                CREATE INDEX IF NOT EXISTS idx_deliveries_product_id ON Deliveries(ProductId);
+                CREATE INDEX IF NOT EXISTS idx_deliveries_supplier_id ON Deliveries(SupplierId);
+                CREATE INDEX IF NOT EXISTS idx_products_category ON Products(Category);
+            ";
+            command.ExecuteNonQuery();
+        }
+
+        static void ExecuteQuery(SqliteConnection connection, string query, string title = "")
+        {
+            if (!string.IsNullOrEmpty(title))
+            {
+                Console.WriteLine($"--- {title} ---");
+            }
             try
             {
                 var command = connection.CreateCommand();
