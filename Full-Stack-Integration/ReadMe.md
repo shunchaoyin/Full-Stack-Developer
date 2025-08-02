@@ -25,4 +25,12 @@ dotnet add package Microsoft.EntityFrameworkCore.Tools
 dotnet new sln -o FullStackSolution
 dotnet sln add FrontEndApp
 dotnet sln add ServerApi
+
+Install the required VS Code extensions:
+
+C# Dev Kit: For enhanced C# support.
+
+REST Client: For making HTTP requests directly in VS Code.
+
+CSharpier: For automatic code formatting.
 ```

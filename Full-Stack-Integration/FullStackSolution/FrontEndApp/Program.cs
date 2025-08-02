@@ -1,11 +1,16 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using FrontEndApp;
+using FrontEndApp.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+// Configure HttpClient to point to the ServerApi
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5275") });
+
+// Register the WeatherService
+builder.Services.AddScoped<WeatherService>();
 
 await builder.Build().RunAsync();
