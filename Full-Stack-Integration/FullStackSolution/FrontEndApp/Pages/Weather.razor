@@ -8,9 +8,23 @@
 
 <p>This component demonstrates fetching data from the server.</p>
 
-@if (forecasts == null)
+@if (isLoading)
 {
-    <p><em>Loading...</em></p>
+    <p><em>Loading weather data...</em></p>
+}
+else if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger">
+        <strong>Error:</strong> @errorMessage
+    </div>
+}
+else if (forecasts == null)
+{
+    <p>No weather data available. Please check your connection or try again later.</p>
+}
+else if (forecasts.Length == 0)
+{
+    <p>No weather data available.</p>
 }
 else
 {
@@ -39,10 +53,23 @@ else
 
 @code {
     private WeatherForecast[]? forecasts;
+    private bool isLoading = true;
+    private string errorMessage = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
         // Use the WeatherService to get data from ServerApi
-        forecasts = await WeatherService.GetWeatherForecastAsync();
+        try
+        {
+            forecasts = await WeatherService.GetWeatherForecastAsync();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error fetching weather data: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+        }
     }
 }
