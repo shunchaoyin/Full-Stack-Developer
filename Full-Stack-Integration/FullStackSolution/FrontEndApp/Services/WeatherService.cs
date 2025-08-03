@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using FrontEndApp.Models;
 
 namespace FrontEndApp.Services;
 
@@ -11,12 +12,15 @@ public class WeatherService
         _httpClient = httpClient;
     }
 
-    public async Task<WeatherForecast[]?> GetWeatherForecastAsync()
+    public async Task<WeatherForecast[]?> GetWeatherForecastAsync(CancellationToken token = default)
     {
         try
         {
             Console.WriteLine($"正在调用 API: {_httpClient.BaseAddress}weatherforecast");
-            var response = await _httpClient.GetFromJsonAsync<WeatherForecast[]>("weatherforecast");
+            var response = await _httpClient.GetFromJsonAsync<WeatherForecast[]>(
+                "weatherforecast",
+                token
+            );
             Console.WriteLine($"成功获取到 {response?.Length ?? 0} 条天气数据");
             return response;
         }
@@ -34,10 +38,15 @@ public class WeatherService
     }
 }
 
-public class WeatherForecast
+public class WeatherState
 {
-    public DateOnly Date { get; set; }
-    public int TemperatureC { get; set; }
-    public string? Summary { get; set; }
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    public WeatherForecast[]? Weather { get; private set; }
+    public event Action? OnChange;
+
+    public void UpdateWeather(WeatherForecast[] newWeather)
+    {
+        Weather = newWeather;
+        NotifyStateChanged();
+    }
+    private void NotifyStateChanged() => OnChange?.Invoke();
 }
