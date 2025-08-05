@@ -19,4 +19,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://
 builder.Services.AddScoped<WeatherService>();
 builder.Services.AddScoped<WeatherState>();
 
+// Register the ChatService
+builder.Services.AddSingleton<ChatService>();
+
 await builder.Build().RunAsync();

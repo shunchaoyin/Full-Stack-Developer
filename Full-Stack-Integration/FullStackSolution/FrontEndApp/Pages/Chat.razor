@@ -1,0 +1,181 @@
+@page "/chat"
+@using Shared.Models
+@inject ChatService ChatService
+@implements IAsyncDisposable
+
+<PageTitle>Chat</PageTitle>
+
+<h3>实时聊天</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5>聊天室 
+                        @if (ChatService.IsConnected)
+                        {
+                            <span class="badge bg-success">已连接</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">未连接</span>
+                        }
+                    </h5>
+                </div>
+                <div class="card-body" style="height: 400px; overflow-y: auto;" id="chatMessages">
+                    @if (chats.Any())
+                    {
+                        @foreach (var chat in chats)
+                        {
+                            <div class="mb-2">
+                                <strong class="text-primary">@chat.User</strong>
+                                <span class="text-muted small">@chat.Timestamp.ToString("HH:mm:ss")</span>
+                                <br />
+                                <span>@chat.Message</span>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted">暂无消息...</p>
+                    }
+                </div>
+                <div class="card-footer">
+                    <div class="row g-2">
+                        <div class="col-md-3">
+                            <input @bind="user" placeholder="您的昵称" class="form-control" />
+                        </div>
+                        <div class="col-md-7">
+                            <input @bind="message" @onkeypress="HandleKeyPress" placeholder="输入消息..." class="form-control" />
+                        </div>
+                        <div class="col-md-2">
+                            <button @onclick="SendMessage" class="btn btn-primary w-100" disabled="@(!CanSendMessage)">发送</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6>连接状态</h6>
+                </div>
+                <div class="card-body">
+                    <p>状态: @connectionStatus</p>
+                    <p>消息数量: @chats.Count</p>
+                    @if (!ChatService.IsConnected)
+                    {
+                        <button @onclick="ConnectToChat" class="btn btn-success">连接到聊天室</button>
+                    }
+                    else
+                    {
+                        <button @onclick="DisconnectFromChat" class="btn btn-warning">断开连接</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string user = string.Empty;
+    private string message = string.Empty;
+    private List<ChatMessage> chats = new();
+    private string connectionStatus = "未连接";
+
+    private bool CanSendMessage => 
+        !string.IsNullOrWhiteSpace(user) && 
+        !string.IsNullOrWhiteSpace(message) && 
+        ChatService.IsConnected;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ChatService.OnMessageReceived += OnMessageReceived;
+        await ConnectToChat();
+    }
+
+    private async Task ConnectToChat()
+    {
+        try
+        {
+            connectionStatus = "连接中...";
+            StateHasChanged();
+            
+            await ChatService.StartAsync();
+            connectionStatus = "已连接";
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            connectionStatus = $"连接失败: {ex.Message}";
+            StateHasChanged();
+        }
+    }
+
+    private async Task DisconnectFromChat()
+    {
+        try
+        {
+            await ChatService.StopAsync();
+            connectionStatus = "已断开";
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            connectionStatus = $"断开失败: {ex.Message}";
+            StateHasChanged();
+        }
+    }
+
+    private void OnMessageReceived(ChatMessage chatMessage)
+    {
+        chats.Add(chatMessage);
+        InvokeAsync(StateHasChanged);
+        InvokeAsync(ScrollToBottom);
+    }
+
+    private async Task SendMessage()
+    {
+        if (CanSendMessage)
+        {
+            var chatMessage = new ChatMessage
+            {
+                User = user,
+                Message = message,
+                Timestamp = DateTime.Now
+            };
+
+            try
+            {
+                await ChatService.SendMessage(chatMessage);
+                message = string.Empty; // Clear the message input
+            }
+            catch (Exception ex)
+            {
+                // Handle send error
+                Console.WriteLine($"发送消息失败: {ex.Message}");
+            }
+        }
+    }
+
+    private async Task HandleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await SendMessage();
+        }
+    }
+
+    private async Task ScrollToBottom()
+    {
+        await Task.Delay(50); // Small delay to ensure DOM is updated
+        // Note: In a real application, you might want to use IJSRuntime to scroll to bottom
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        ChatService.OnMessageReceived -= OnMessageReceived;
+        await ChatService.DisposeAsync();
+    }
+}

@@ -1,9 +1,14 @@
+using ServerApi.Hubs;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Add SignalR
+builder.Services.AddSignalR();
 
 // Add CORS support
 builder.Services.AddCors(options =>
@@ -12,7 +17,8 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("http://localhost:5159", "https://localhost:7111") // Updated Blazor app URLs
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+              .AllowCredentials(); // Required for SignalR
     });
 });
 
@@ -25,10 +31,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// Only use HTTPS redirection in production
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 // Use CORS
 app.UseCors("AllowBlazorApp");
+
+// Map SignalR Hub
+app.MapHub<ChatHub>("/chathub");
 
 var summaries = new[]
 {
