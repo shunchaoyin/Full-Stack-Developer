@@ -25,14 +25,14 @@
         try
         {
             using var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://localhost:5091/api/products");
+            var response = await httpClient.GetAsync("http://localhost:5091/api/productlist");
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
             products = System.Text.Json.JsonSerializer.Deserialize<Product[]>(json, new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error fetching products: {ex.Message}");
+            Console.WriteLine($"Error fetching productlist: {ex.Message}");
             products = Array.Empty<Product>();
         }
 
@@ -44,5 +44,12 @@
         public string? Name { get; set; }
         public double Price { get; set; }
         public int Stock { get; set; }
+        public Category? Category { get; set; }
+    }
+
+    public class Category
+    {
+        public int Id { get; set; }
+        public string? Name { get; set; }
     }
 }
