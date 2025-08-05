@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Components.Web;
+using Blazored.LocalStorage;
+using Blazored.SessionStorage;
+
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using FrontEndApp;
 using FrontEndApp.Services;
@@ -8,6 +11,8 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 // Configure HttpClient to point to the ServerApi
+builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddBlazoredSessionStorage();
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5275") });
 
 // Register the WeatherService and WeatherState
